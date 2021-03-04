@@ -1,24 +1,32 @@
-import serial.tools.list_ports
+import serial
 import time
 
+ser = serial.Serial('/dev/ttyACM0', 115200)
 
-def main():
-    baud_rate = 115200
-    timeout = 5
-    com_port_name = "/dev/ttyACM0"
-    g_code_file_name = ""
-    ser = serial.Serial(com_port_name, baud_rate, timeout)
+ser.isOpen()
 
-    f = open(g_code_file_name, 'r')
-    g_code_cmds = f.read().split('\n')
+print('Connection Successful\nEnter Commands below:\nType "exit" to close connection')
 
-    for line in g_code_cmds:
-        ser.write(line + "\r\n")
-        time.sleep(1)
-        print(ser.read())
-        input("Press Enter to send the next command:")
-
-
-if __name__ == '__main__':
-    main()
-
+input = 1
+while 1:
+    #get keyboard input
+    input = raw_input(">> ")
+    if input == 'exit':
+        ser.close()
+        exit()
+    else:
+        #Send input to Prusa
+        #Prusa accepts \n line termination as well as \r\n
+        ser.write(input + '\n')
+        out = ''
+        #wait for response, 0.5 seconds seems sufficient, might be able to go lower
+        time.sleep(0.5)
+        
+        # Wait for response
+        while ser.inWaiting() > 0:
+            out += ser.read(1)
+        
+        if out != '':
+            print ">>" + out
+        else:
+            print "No response"
