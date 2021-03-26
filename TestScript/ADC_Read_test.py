@@ -1,5 +1,7 @@
 
 # copied from https://github.com/adafruit/Adafruit_Python_MCP3008/blob/master/examples/simpletest.py
+# library can be downloaded here: https://learn.adafruit.com/raspberry-pi-analog-to-digital-converters/mcp3008
+# should work with the potentiometer....
 
 import time
 import Adafruit_GPIO.SPI as SPI
